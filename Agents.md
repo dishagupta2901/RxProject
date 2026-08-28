@@ -10,7 +10,11 @@ This document governs future implementation work. At this stage the repository c
 
 ## Preparation update (2026-08-28)
 
-Repository analysis established and created the source, frontend, test, database, deployment, and docs directories listed below. They are intentionally empty: implementation code, dependencies, migrations, and generated artifacts remain deferred.
+Repository analysis established the source, frontend, test, database, deployment, and docs directories listed below.
+
+## Governance update (2026-08-28)
+
+The directories above are no longer empty: `src/RxFlow.Api`, `RxFlow.Application`, `RxFlow.Domain`, `RxFlow.Infrastructure`, `RxFlow.Workers`, and `RxFlow.Reporting` contain real implementation code, `database/migrations` has real EF Core migrations, and `frontend/` has a working React/TypeScript client. The "intentionally empty" / "planned layout" framing below is stale for those paths; treat the tree as the actual current layout, not a future plan. `Requirements.md`, `architecture.md`, and `DECISIONS.md` still carry some now-inaccurate "no implementation yet" status lines — that mismatch is a known limitation to resolve via `rxflow-decision-sync`, not something this update rewrites. See "Durable governance rules" below for the eight repository-wide rules every change must satisfy regardless of which skill or directory owns it.
 
 - The supplied project brief is the current product and lab specification.
 - Known facts, proposed decisions, assumptions, and open questions must be labelled as such in design documentation.
@@ -80,6 +84,19 @@ Instructor-only files must live beside, not inside, the participant tree:
 - Use xUnit, FluentAssertions, one mocking library (NSubstitute or Moq), FsCheck, and Testcontainers for .NET. Do not mix alternatives without a recorded reason.
 - Preserve real project/module boundaries. Cross-boundary access goes through an explicit port or contract; any lab-required boundary violation must remain ordinary-looking production code and must not be documented for participants.
 - Avoid timing-only concurrency tests (`Thread.Sleep`/`Task.Delay`). Tests must use deterministic coordination and realistic work.
+
+## Durable governance rules
+
+These are repository standards, not one-time task instructions. They apply everywhere in the repo regardless of which `.codex/skills/*` file or directory a change touches. A skill file may add component-specific detail; none may weaken these.
+
+1. **Order-submission idempotency.** `POST /orders` — and any future payment-equivalent, state-committing submission path — must be idempotent and covered by a duplicate-submission test. Ownership (application code owns idempotency, Hangfire owns job retries) is D-003 in `DECISIONS.md`, currently **proposed, not yet implemented or tested** — see `.codex/skills/rxflow-api-application-engineer/SKILL.md` and `.codex/skills/rxflow-worker-reliability-engineer/SKILL.md`.
+2. **Database migrations.** Every EF Core migration documents upgrade behavior and rollback-or-forward-fix behavior, and is validated by an apply/downgrade integration test. See `.codex/skills/rxflow-infrastructure-engineer/SKILL.md` and `Requirements.md`.
+3. **Public API compatibility.** A change to a public HTTP route, request/response schema, status code, or error contract requires an explicit compatibility review (what breaks existing callers, how it's communicated) before merge. See `.codex/skills/rxflow-api-application-engineer/SKILL.md`.
+4. **New external calls.** Any new outbound HTTP/Kafka/Redis call states its timeout and retry policy, including whether the call is safe to retry, before or alongside the code that adds it (D-003). A `ConnectorOptions.Timeout` that is defined but never applied to the `HttpClient`, or a retry policy that is claimed but untested, does not satisfy this rule.
+5. **Sensitive data must never be logged.** Prescription measurements, lens/frame specifics tied to a person, and auth tokens are sensitive (D-006, `DECISIONS.md`); logs, traces, and Kafka events may carry only synthetic order IDs and status. No nested skill or component file may narrow this rule.
+6. **Infrastructure changes require security validation.** Changes to Compose services, connector configuration, secrets handling, or authentication (D-007) are reviewed for least privilege, no real credentials or endpoints, and no locally-exposed surface beyond what the lab needs.
+7. **Defect fixes require a regression test.** Every fix for a reported or discovered defect adds a test that reproducibly fails before the fix and passes after it; capture that before/after evidence in the final report. This does not relax `rxflow-verification-engineer`'s existing rule against loosening assertions to hide seeded training defects.
+8. **Final reports show evidence.** Every reported outcome states the exact command, working directory, exit code, and a concise result — never "should work" without having run it. (Restated by Workflow step 4 below and by most `.codex/skills/*` files; this is the one universal rule every skill is expected to repeat rather than merely link to, since it governs how *all* other evidence is reported.)
 
 ## Workflow
 
