@@ -40,6 +40,7 @@ public sealed class SubmitOrderServiceTests
         public List<LensOrder> Items { get; } = [];
         public Task AddAsync(LensOrder order, CancellationToken cancellationToken) { Items.Add(order); return Task.CompletedTask; }
         public Task<LensOrder?> GetAsync(Guid id, CancellationToken cancellationToken) => Task.FromResult(Items.SingleOrDefault(x => x.Id == id));
+        public Task UpdateAsync(LensOrder order, CancellationToken cancellationToken) => Task.CompletedTask;
     }
 
     private sealed class FakeDispatcher : IOrderWorkDispatcher

@@ -6,6 +6,7 @@ public interface IOrderRepository
 {
     Task AddAsync(LensOrder order, CancellationToken cancellationToken);
     Task<LensOrder?> GetAsync(Guid id, CancellationToken cancellationToken);
+    Task UpdateAsync(LensOrder order, CancellationToken cancellationToken);
 }
 
 public interface IOrderWorkDispatcher
@@ -25,3 +26,6 @@ public interface IPriceCalculator
 
 public sealed record SubmitOrderCommand(Prescription Prescription, Frame Frame);
 public sealed record SubmitOrderResult(Guid OrderId, decimal Price, OrderStatus Status);
+
+public enum CancelOrderOutcome { Cancelled, NotFound, AlreadyCancelled, NotCancellable }
+public sealed record CancelOrderResult(CancelOrderOutcome Outcome, OrderStatus? Status);

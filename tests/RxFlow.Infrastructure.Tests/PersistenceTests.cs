@@ -27,6 +27,30 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    public async Task OrderRepositoryPersistsUpdateAcrossDbContextInstances()
+    {
+        var databaseName = Guid.NewGuid().ToString();
+        var options = new DbContextOptionsBuilder<RxFlowDbContext>().UseInMemoryDatabase(databaseName).Options;
+        var order = new LensOrder(Guid.NewGuid(), new Prescription(1, 0, 90), new Frame("F-001", 50, 40));
+
+        await using (var writeDb = new RxFlowDbContext(options))
+        {
+            var repository = new EfOrderRepository(writeDb);
+            await repository.AddAsync(order, CancellationToken.None);
+
+            var loaded = await repository.GetAsync(order.Id, CancellationToken.None);
+            loaded!.TransitionTo(OrderStatus.Validated);
+            await repository.UpdateAsync(loaded, CancellationToken.None);
+        }
+
+        await using var readDb = new RxFlowDbContext(options);
+        var reloaded = await new EfOrderRepository(readDb).GetAsync(order.Id, CancellationToken.None);
+
+        Assert.NotNull(reloaded);
+        Assert.Equal(OrderStatus.Validated, reloaded!.Status);
+    }
+
+    [Fact]
     public async Task ReportReaderProjectsPersistedOrderWithoutTrackingIt()
     {
         var options = new DbContextOptionsBuilder<RxFlowDbContext>()

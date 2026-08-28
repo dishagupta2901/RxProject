@@ -30,6 +30,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddSingleton<IPriceCalculator, LocalPriceCalculator>();
 builder.Services.AddSingleton<IOrderWorkDispatcher, LocalWorkDispatcher>();
 builder.Services.AddScoped<SubmitOrderService>();
+builder.Services.AddScoped<CancelOrderService>();
 builder.Services.AddHangfire(configuration => configuration.UseMemoryStorage());
 builder.Services.AddHangfireServer();
 builder.Services.AddScoped<OrderWorkflowJob>();

@@ -10,9 +10,15 @@ namespace RxFlow.Api;
 public sealed class OrdersController : ControllerBase
 {
     private readonly SubmitOrderService _service;
+    private readonly CancelOrderService _cancelService;
     private readonly IOrderRepository _orders;
 
-    public OrdersController(SubmitOrderService service, IOrderRepository orders) { _service = service; _orders = orders; }
+    public OrdersController(SubmitOrderService service, CancelOrderService cancelService, IOrderRepository orders)
+    {
+        _service = service;
+        _cancelService = cancelService;
+        _orders = orders;
+    }
 
     [HttpPost]
     public async Task<ActionResult<SubmitOrderResult>> Post(CreateOrderRequest request, CancellationToken cancellationToken)
@@ -37,6 +43,20 @@ public sealed class OrdersController : ControllerBase
     {
         var order = await _orders.GetAsync(id, cancellationToken).ConfigureAwait(false);
         return order is null ? NotFound() : Ok(new { order.Id, order.Status, FrameId = order.Frame.Id });
+    }
+
+    [HttpPost("{id:guid}/cancel")]
+    public async Task<ActionResult<object>> Cancel(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _cancelService.CancelAsync(id, cancellationToken).ConfigureAwait(false);
+        return result.Outcome switch
+        {
+            CancelOrderOutcome.Cancelled => Ok(new { orderId = id, status = result.Status }),
+            CancelOrderOutcome.NotFound => NotFound(),
+            CancelOrderOutcome.AlreadyCancelled => Conflict(new { error = "Order is already cancelled." }),
+            CancelOrderOutcome.NotCancellable => Conflict(new { error = "Shipped orders cannot be cancelled." }),
+            _ => throw new InvalidOperationException($"Unhandled cancel outcome: {result.Outcome}"),
+        };
     }
 }
 
