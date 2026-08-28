@@ -2,6 +2,10 @@
 
 This is a coordination plan for later implementation. Each role below now has a corresponding skill under `.codex/skills/` (added 2026-08-28, moved from a short-lived `.claude/agents/` location the same day so Codex can load them too): `rxflow-domain-modeller`, `rxflow-api-application-engineer`, `rxflow-infrastructure-engineer`, `rxflow-worker-reliability-engineer`, `rxflow-verification-engineer`, `rxflow-instructor-doc-editor`, and `rxflow-frontend-contract-engineer`. Invoking a role does not itself authorize skipping phase gates in `docs/implementation-plan.md`.
 
+## Skill mirroring (2026-08-28)
+
+All twelve `.codex/skills/*/SKILL.md` files are mirrored verbatim under `.claude/skills/*/SKILL.md` so Claude Code's `Skill` tool can discover and load the same role/workflow guidance Codex reads. `.codex/skills/` is the canonical source — edit there first. Symlinking was considered and rejected: this repo has `core.symlinks=false`, so a symlink would commit as a plain-text path reference instead of a real link, and would require per-clone Windows dev-mode/git-config changes to behave correctly. Until an automated sync check exists, any edit to a `.codex/skills/<name>/SKILL.md` file must be copied to its `.claude/skills/<name>/SKILL.md` counterpart in the same change; a change that updates one without the other is incomplete.
+
 ## Roles
 
 | Role | Responsibility | Primary outputs |
