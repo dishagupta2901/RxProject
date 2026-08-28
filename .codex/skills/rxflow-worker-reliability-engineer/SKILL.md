@@ -20,7 +20,7 @@ Use for a change that touches `src/RxFlow.Workers` or reliability/concurrency te
 ## Working rules
 
 - Concurrency and reliability tests must use realistic work and deterministic coordination — never `Thread.Sleep`/`Task.Delay`-based synchronization.
-- Worker retries and duplicate delivery must be repeatable and observable, not merely assumed.
+- Worker retries and duplicate delivery must be repeatable and observable, not merely assumed — add a redelivery/duplicate-dispatch test for any job that can receive the same message twice (Agents.md durable rule 1).
 - Use synthetic identifiers and fixtures only; isolated local Hangfire/Redpanda storage per checkout.
 - Update `Requirements.md`, `architecture.md`, and `DECISIONS.md` when an assumption becomes a decision.
 - Run `dotnet build`/`dotnet test` for the affected projects and report actual commands, exit codes, and output.

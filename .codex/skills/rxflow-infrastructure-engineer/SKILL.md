@@ -8,8 +8,10 @@ Use for a change that touches `src/RxFlow.Infrastructure`, database migrations, 
 ## Scope
 
 - Owns `src/RxFlow.Infrastructure`: EF Core/Npgsql persistence and repositories, Redis cache and distributed-lock adapters, Kafka producer via Confluent.Kafka/Redpanda, typed/named outbound `HttpClient` connectors (`IHttpClientFactory`) for pricing, lab capability/load, coating, and shipment fakes, and OpenTelemetry exporters.
-- Creates purposeful EF Core migrations (four to six planned, per `Requirements.md`), seeds only synthetic data, and documents downgrade behavior.
+- Creates purposeful EF Core migrations (four to six planned, per `Requirements.md`), seeds only synthetic data, and documents downgrade behavior; if a migration cannot be cleanly rolled back, document the forward-fix migration path instead (Agents.md durable rule 2).
 - Connector base URLs, credentials, and timeouts come from configuration and point only at local Compose fakes — never a real endpoint.
+- Every new outbound HTTP/Kafka/Redis call states and tests its timeout and retry policy before or alongside the code that adds it (Agents.md durable rule 4). `ConnectorOptions.Timeout` is currently defined but never applied to the typed `HttpClient`s in `Program.cs`, and no Polly/resilience handler exists — treat this as an open gap, not a satisfied requirement, until a timeout is actually wired and covered by a test.
+- Changes to Compose services, connector configuration, secrets, or authentication (D-007) require an explicit security-validation pass: least privilege, no real credentials/endpoints, no locally-exposed surface beyond what the lab needs (Agents.md durable rule 6).
 
 ## Boundaries
 

@@ -12,6 +12,7 @@ This is a coordination plan for later implementation. Each role below now has a 
 | Worker/reliability engineer | Hangfire jobs, scheduling, retry policies, locks/counters, operational diagnostics | `src/RxFlow.Workers`, reliability tests |
 | Verification engineer | Testcontainers scenarios, property tests, quality gates, Compose smoke tests and acceptance evidence | `tests/*`, command evidence |
 | Instructor-documentation editor | Participant README and design docs; separate instructor guide and exactly two diagrams | `docs/*`, sibling `../instructor/*` |
+| Reporting/analytics *(gap — no skill yet)* | `src/RxFlow.Reporting` exists in the repo (`OrderReportingService`, `OrderStatusView`, wired to `ReportsController`) but has no dedicated `.codex/skills/*` role; it currently only inherits the root `Agents.md` durable rules. Create `rxflow-reporting-engineer` (or fold into `rxflow-api-application-engineer`) before making non-trivial changes there, covering parameterized queries only, de-identified/aggregate fields only, and schema-compatibility review. | `src/RxFlow.Reporting` — unowned |
 
 ## Collaboration protocol
 

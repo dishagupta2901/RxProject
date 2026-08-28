@@ -17,6 +17,8 @@ Use for a change that touches `src/RxFlow.Api`, `src/RxFlow.Application`, or the
 - Cross-boundary access goes through an explicit port or contract — never reach into `RxFlow.Infrastructure` or `RxFlow.Workers` internals.
 - Domain and API/application work must agree on contracts before either adds infrastructure assumptions.
 - Specify idempotency and failure semantics explicitly at the application boundary; no unbounded nested retries (retry/timeout ownership per D-003).
+- `POST /orders` (and any later payment-equivalent submission endpoint) must reject or safely no-op a duplicate submission, backed by a test that submits the same request twice and asserts a single order/effect (Agents.md durable rule 1). This is currently unimplemented — `OrdersController` has no idempotency-key or dedupe check — so it is open work, not an established guarantee.
+- A change to a public route, request/response schema, status code, or error contract requires a written compatibility note in the PR/change description (what breaks for existing callers, migration/versioning if anything) before merge (Agents.md durable rule 3). No compatibility-review process exists yet in this repo; establish it the first time a public contract changes.
 
 ## Working rules
 
