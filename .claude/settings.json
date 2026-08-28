@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/user/.codex/**)",
+      "Bash(where.exe codex *)",
+      "Bash(npm ls *)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Users/user/AppData/Local/Programs/**)",
+      "Bash(grep -E '^\\\\[|^[a-zA-Z_]+ ?=' \"/c/Users/user/.codex/config.toml\" 2>&1 | sed -E 's/=.*/= <redacted>/' )",
+      "Read(//c/Users/user/.codex/rules/**)",
+      "Bash(git -C . status --porcelain=2)",
+      "PowerShell(powershell -NoProfile -ExecutionPolicy Bypass -File \"c:\\\\Users\\\\user\\\\Documents\\\\RxProject\\\\scripts\\\\codex-profiles\\\\create-remediation-worktree.ps1\")",
+      "Bash(mkdir -p evidence)",
+      "Bash(cp rx-analyst-2026-08-28T09-35-03Z.json evidence/rx-analyst-verify-2026-08-28.json)",
+      "Bash(cp rx-developer-2026-08-28T09-35-04Z.json evidence/rx-developer-verify-2026-08-28.json)",
+      "Bash(cp rx-security-2026-08-28T09-35-05Z.json evidence/rx-security-verify-2026-08-28.json)",
+      "Bash(cp rx-ci-2026-08-28T09-35-06Z.json evidence/rx-ci-verify-2026-08-28.json)",
+      "Bash(ls -la \"/c/Users/user/.codex\" | head -60)",
+      "Bash(find \"/c/Users/user/.codex\" -maxdepth 1 -iname \"*.toml\" -o -maxdepth 1 -iname \"*profile*\" 2>&1)",
+      "Bash(codex --version)",
+      "Bash(python3 -c ' *)",
+      "Bash(python -c ' *)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\user\\AppData\\Local\\Temp\\rxflow-remediation-worktrees"
+    ]
+  }
+}
