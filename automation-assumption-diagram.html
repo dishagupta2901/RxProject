@@ -1,0 +1,296 @@
+<title>Full-Auto Fix Flow</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #f6f5f1;
+    --paper: #fdfcf9;
+    --ink: #1e211d;
+    --ink-soft: #565c53;
+    --line: #d8d5cb;
+    --accent: #2f6f62;
+    --accent-soft: #e4efec;
+    --warn: #b07a2e;
+    --warn-soft: #f3e9d8;
+    --fail: #a8503c;
+    --fail-soft: #f4e3dd;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141713;
+      --paper: #1b1e19;
+      --ink: #ece9e1;
+      --ink-soft: #a4a99c;
+      --line: #383c34;
+      --accent: #6fc6b0;
+      --accent-soft: #1f3630;
+      --warn: #e0b26a;
+      --warn-soft: #3a2f1c;
+      --fail: #e08872;
+      --fail-soft: #3a251f;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #141713;
+    --paper: #1b1e19;
+    --ink: #ece9e1;
+    --ink-soft: #a4a99c;
+    --line: #383c34;
+    --accent: #6fc6b0;
+    --accent-soft: #1f3630;
+    --warn: #e0b26a;
+    --warn-soft: #3a2f1c;
+    --fail: #e08872;
+    --fail-soft: #3a251f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    padding: clamp(24px, 5vw, 64px);
+    display: flex;
+    justify-content: center;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 980px;
+  }
+
+  header {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    line-height: 1.12;
+    margin: 0 0 14px;
+    text-wrap: balance;
+    max-width: 16ch;
+  }
+
+  header p {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .diagram-wrap {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: clamp(16px, 3vw, 32px);
+    overflow-x: auto;
+  }
+
+  svg { display: block; min-width: 720px; width: 100%; height: auto; }
+
+  .stage-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    fill: var(--ink-soft);
+  }
+
+  .node-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    fill: var(--ink);
+  }
+
+  .node-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    fill: var(--ink-soft);
+  }
+
+  .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+  }
+
+  footer {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+
+  .assumption {
+    border-left: 2px solid var(--line);
+    padding-left: 14px;
+  }
+
+  .assumption .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .assumption .v {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .note {
+    margin-top: 30px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    max-width: 68ch;
+  }
+</style>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">Hypothetical pipeline · assumption model</p>
+    <h1>If a repo's 10 open issues ran through full automation</h1>
+    <p>No real repository here — this maps the outcome you'd typically expect if an autonomous agent triaged, fixed, and verified ten arbitrary issues end‑to‑end with zero human intervention. Ratios are assumptions based on common fix-difficulty distributions, not a measurement.</p>
+  </header>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow diagram of 10 issues moving through triage, auto-fix, and verification stages to three outcomes">
+
+      <!-- stage labels -->
+      <text x="70" y="28" class="stage-label">Input</text>
+      <text x="270" y="28" class="stage-label">Triage (auto)</text>
+      <text x="500" y="28" class="stage-label">Fix attempt (auto)</text>
+      <text x="740" y="28" class="stage-label">Outcome</text>
+
+      <!-- Stage 1: 10 issues stacked -->
+      <g id="issues">
+        <!-- 10 small chips -->
+        <g transform="translate(20,50)">
+          <!-- generate 10 chips via manual placement -->
+        </g>
+      </g>
+
+      <!-- issue chips -->
+      <g font-family="IBM Plex Mono, monospace" font-size="11">
+        <!-- chip template repeated -->
+      </g>
+
+      <!-- Left column: 10 issue nodes -->
+      <g transform="translate(20,44)">
+        <text x="0" y="0" class="node-sub" font-size="11">10 issues, mixed severity</text>
+      </g>
+
+      <!-- issue stack -->
+      <g transform="translate(20,58)">
+        <!-- rows -->
+        <g id="chips"></g>
+      </g>
+
+      <!-- central triage box -->
+      <rect x="230" y="70" width="150" height="86" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.2"/>
+      <text x="305" y="102" text-anchor="middle" class="node-title" font-size="14">Classify</text>
+      <text x="305" y="120" text-anchor="middle" class="node-sub" font-size="11">severity · file scope</text>
+      <text x="305" y="136" text-anchor="middle" class="node-sub" font-size="11">reproducibility</text>
+
+      <!-- second triage box lower -->
+      <rect x="230" y="380" width="150" height="86" rx="10" fill="var(--paper)" stroke="var(--line)" stroke-width="1.2"/>
+      <text x="305" y="412" text-anchor="middle" class="node-title" font-size="14">Ambiguous</text>
+      <text x="305" y="430" text-anchor="middle" class="node-sub" font-size="11">spec unclear /</text>
+      <text x="305" y="446" text-anchor="middle" class="node-sub" font-size="11">design decision needed</text>
+
+      <!-- fix attempt box (top, for clean cases) -->
+      <rect x="460" y="60" width="170" height="100" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.2"/>
+      <text x="545" y="90" text-anchor="middle" class="node-title" font-size="14">Patch + self-test</text>
+      <text x="545" y="110" text-anchor="middle" class="node-sub" font-size="11">generate diff</text>
+      <text x="545" y="126" text-anchor="middle" class="node-sub" font-size="11">run test suite</text>
+      <text x="545" y="142" text-anchor="middle" class="node-sub" font-size="11">retry ≤3× on failure</text>
+
+      <!-- fix attempt box (bottom, for ambiguous/edge cases) -->
+      <rect x="460" y="330" width="170" height="90" rx="10" fill="var(--fail-soft)" stroke="var(--fail)" stroke-width="1.2"/>
+      <text x="545" y="358" text-anchor="middle" class="node-title" font-size="14">Best-effort patch</text>
+      <text x="545" y="376" text-anchor="middle" class="node-sub" font-size="11">low confidence</text>
+      <text x="545" y="392" text-anchor="middle" class="node-sub" font-size="11">tests flaky / partial</text>
+
+      <!-- outcome boxes -->
+      <rect x="700" y="30" width="190" height="80" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.4"/>
+      <text x="795" y="58" text-anchor="middle" class="node-title" font-size="15">Merged clean</text>
+      <text x="795" y="78" text-anchor="middle" class="node-sub" font-size="11">tests pass, no review flag</text>
+      <text x="795" y="98" text-anchor="middle" class="count" font-size="20" fill="var(--accent)">6 / 10</text>
+
+      <rect x="700" y="230" width="190" height="80" rx="10" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="1.4"/>
+      <text x="795" y="258" text-anchor="middle" class="node-title" font-size="15">Flagged for review</text>
+      <text x="795" y="278" text-anchor="middle" class="node-sub" font-size="11">patch applied, confidence low</text>
+      <text x="795" y="298" text-anchor="middle" class="count" font-size="20" fill="var(--warn)">3 / 10</text>
+
+      <rect x="700" y="430" width="190" height="80" rx="10" fill="var(--fail-soft)" stroke="var(--fail)" stroke-width="1.4"/>
+      <text x="795" y="458" text-anchor="middle" class="node-title" font-size="15">Unresolved</text>
+      <text x="795" y="478" text-anchor="middle" class="node-sub" font-size="11">no passing patch found</text>
+      <text x="795" y="498" text-anchor="middle" class="count" font-size="20" fill="var(--fail)">1 / 10</text>
+
+      <!-- connecting paths -->
+      <g fill="none" stroke-linecap="round">
+        <!-- issues -> classify -->
+        <path d="M175,100 C205,100 205,113 230,113" stroke="var(--line)" stroke-width="2"/>
+        <!-- classify -> ambiguous branch -->
+        <path d="M305,156 C305,260 305,320 305,380" stroke="var(--line)" stroke-width="1.6" stroke-dasharray="4 4"/>
+        <!-- classify -> patch(top) -->
+        <path d="M380,105 C420,105 420,110 460,110" stroke="var(--accent)" stroke-width="4"/>
+        <!-- ambiguous -> best-effort patch -->
+        <path d="M380,415 C420,395 420,380 460,375" stroke="var(--fail)" stroke-width="3"/>
+        <!-- patch(top) -> merged -->
+        <path d="M630,95 C665,85 665,72 700,68" stroke="var(--accent)" stroke-width="4"/>
+        <!-- patch(top) -> flagged (self-test uncertain subset) -->
+        <path d="M630,140 C665,190 665,240 700,258" stroke="var(--warn)" stroke-width="2.6"/>
+        <!-- best-effort -> flagged -->
+        <path d="M630,355 C665,320 665,300 700,282" stroke="var(--warn)" stroke-width="2.6"/>
+        <!-- best-effort -> unresolved -->
+        <path d="M630,395 C665,430 665,450 700,462" stroke="var(--fail)" stroke-width="3"/>
+      </g>
+
+      <!-- issue chip list, drawn last so it's on top -->
+      <g font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--ink)">
+        <g id="chip-list"></g>
+      </g>
+    </svg>
+  </div>
+
+  <footer>
+    <div class="assumption">
+      <span class="k">Assumption</span>
+      <span class="v">~60% of issues are self-contained (single-file, reproducible, clear acceptance criteria) — these clear automation end-to-end.</span>
+    </div>
+    <div class="assumption">
+      <span class="k">Assumption</span>
+      <span class="v">~30% touch ambiguous specs or cross-module effects — a patch lands but confidence is low enough to route to a human.</span>
+    </div>
+    <div class="assumption">
+      <span class="k">Assumption</span>
+      <span class="v">~10% have no test coverage to verify against, or genuinely need a product decision — full automation stalls without one.</span>
+    </div>
+    <div class="assumption">
+      <span class="k">Caveat</span>
+      <span class="v">Real ratios shift hard with codebase test coverage, issue quality, and how much repo-specific context the agent is given.</span>
+    </div>
+  </footer>
+
+  <p class="note">This is an illustrative model, not a forecast for any specific repository — share the actual 10 issues and I can score each one individually instead of assuming a distribution.</p>
+</div>
