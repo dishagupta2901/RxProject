@@ -9,6 +9,7 @@ The repository is empty. “Known” items come directly from the supplied brief
 Known:
 
 1. Accept an optician order with a prescription and frame choice through `POST /orders`.
+1a. Allow an in-flight order to be cancelled through `POST /orders/{id}/cancel`; a shipped order cannot be cancelled, and cancelling an already-cancelled order is reported rather than treated as an error.
 2. Validate whether the prescription can be physically ground into the selected lens.
 3. Price the order.
 4. Route work to an Rx lab using capability and live-load information.

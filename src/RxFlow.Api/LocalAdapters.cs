@@ -23,6 +23,9 @@ internal sealed class LocalOrderRepository : IOrderRepository, IOrderReportReade
     public Task<LensOrder?> GetAsync(Guid id, CancellationToken cancellationToken)
         => Task.FromResult(_orders.TryGetValue(id, out var order) ? order : null);
 
+    public Task UpdateAsync(LensOrder order, CancellationToken cancellationToken)
+    { _orders[order.Id] = order; return Task.CompletedTask; }
+
     Task<OrderStatusView?> IOrderReportReader.GetOrderAsync(Guid orderId, CancellationToken cancellationToken)
         => Task.FromResult(_orders.TryGetValue(orderId, out var order) ? ToView(order) : null);
 

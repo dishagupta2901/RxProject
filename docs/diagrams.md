@@ -107,10 +107,14 @@ flowchart LR
     subgraph API ["RxFlow.Api"]
         Health["GET /health<br/>(anonymous)"]
         Orders["POST /orders<br/>[Authorize]"]
+        OrdersGet["GET /orders/{id}<br/>[Authorize]"]
+        OrdersCancel["POST /orders/{id}/cancel<br/>[Authorize]"]
         HangfireUI["/hangfire<br/>(dashboard, no policy applied)"]
     end
 
     Client -->|JWT bearer, Authority/Audience from config| Orders
+    Client -->|JWT bearer| OrdersGet
+    Client -->|JWT bearer| OrdersCancel
     Client --> Health
     Client --> HangfireUI
 
@@ -133,11 +137,12 @@ flowchart LR
         Kafka["Kafka topic: rxflow.order.v1"]
     end
     Orders --> Outbox
+    OrdersCancel --> Outbox
     Outbox --> Kafka
 ```
 
 **Notes**
 
-- Only two HTTP endpoints exist today: `POST /orders` (the only business endpoint, requires authentication) and `GET /health`. The `lab-override` authorization policy is defined in `Program.cs` but no endpoint currently requires it — there is no lab-override workflow implemented yet (open item in `Requirements.md`).
+- Business endpoints today: `POST /orders`, `GET /orders/{id}`, `POST /orders/{id}/cancel` (all `[Authorize]`), plus `GET /health` (anonymous) and the reporting endpoints on `ReportsController`. `POST /orders/{id}/cancel` calls `CancelOrderService`, which transitions the order to `Rejected` via the existing domain rule, persists it through `IOrderRepository.UpdateAsync`, and writes an `OrderCancelled.v1` outbox record — it does not enqueue a Hangfire job. The `lab-override` authorization policy is defined in `Program.cs` but no endpoint currently requires it — there is no lab-override workflow implemented yet (open item in `Requirements.md`).
 - The four outbound connectors (`Pricing`, `LabCapability`, `Coating`, `Shipment`) are wired into DI with configurable base URLs (`ConnectorOptions`) but are not called from `SubmitOrderService` or `OrderWorkflowJob` today — pricing actually goes through the in-process `LocalPriceCalculator`, not `PricingClient`.
 - CORS is scoped to a single allowed origin (`http://localhost:5173`) for the local Vite frontend.

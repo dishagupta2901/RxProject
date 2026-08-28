@@ -28,6 +28,8 @@ An optician-facing client submits an order containing a prescription and frame c
 
 `POST /orders` enters `RxFlow.Api`, binds an order request, and invokes the application submit-order service. The service validates and constructs domain values, persists the order through a repository, and enqueues a Hangfire job. The worker reloads the order, performs lab submission/scheduling through connector ports, and publishes a Kafka event. Consumers update order status and the shipment path. Correlation/trace context should cross the HTTP-to-worker-to-Kafka boundaries.
 
+`POST /orders/{id}/cancel` enters `RxFlow.Api` and invokes the application cancel-order service, which loads the order through the same repository port, applies the existing `LensOrder.TransitionTo(Rejected)` domain rule, persists the update, and appends an `OrderCancelled.v1` outbox record. A shipped order is reported as not cancellable rather than transitioned; an already-rejected order is reported as already cancelled. No Hangfire job or Kafka publish is triggered synchronously — the outbox dispatch job picks up the event on its normal schedule.
+
 The exact endpoint style (controllers or minimal APIs), validation library, event schema, and job partitioning are open until recorded in `DECISIONS.md`.
 
 ## Data flow and consistency

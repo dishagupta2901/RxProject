@@ -14,4 +14,10 @@ public sealed class EfOrderRepository(RxFlowDbContext db) : IOrderRepository
 
     public Task<LensOrder?> GetAsync(Guid id, CancellationToken cancellationToken)
         => db.Orders.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task UpdateAsync(LensOrder order, CancellationToken cancellationToken)
+    {
+        if (db.Entry(order).State == EntityState.Detached) db.Orders.Update(order);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
 }
