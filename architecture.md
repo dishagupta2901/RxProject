@@ -4,6 +4,8 @@
 
 This is a proposed architecture based on the supplied lab brief. The repository is currently empty, so there is no existing implementation to describe. Decisions marked “proposed” must be confirmed in `DECISIONS.md` before coding.
 
+See `docs/diagrams.md` for the current repo-structure, code-flow, and API/integration-surface diagrams (kept in sync with the code, not aspirational).
+
 ## System context
 
 An optician-facing client submits an order containing a prescription and frame choice. RxFlow validates physical grindability, calculates price, chooses an Rx lab, schedules surfacing and coating, and publishes progress toward shipment. All local dependencies are synthetic and run in isolated Docker Compose services.

@@ -13,6 +13,11 @@ public interface IOrderWorkDispatcher
     Task DispatchAsync(Guid orderId, CancellationToken cancellationToken);
 }
 
+public interface IOutboxWriter
+{
+    Task AppendAsync(string eventType, Guid aggregateId, string payload, CancellationToken cancellationToken);
+}
+
 public interface IPriceCalculator
 {
     Task<decimal> CalculateAsync(LensOrder order, CancellationToken cancellationToken);

@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <RootNamespace>RxFlow.Workers</RootNamespace>
-    <AssemblyName>RxFlow.Workers</AssemblyName>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\RxFlow.Application\RxFlow.Application.csproj" />
     <ProjectReference Include="..\RxFlow.Infrastructure\RxFlow.Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup><PackageReference Include="Hangfire.Core" /></ItemGroup>
+
 </Project>

@@ -63,7 +63,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** the complete synthetic flow is repeatable and observable; worker retries and duplicate delivery are deterministic.
 
-## Phase 7 — Reporting boundary and React client
+## Phase 7 — Reporting boundary and React client (started 2026-08-28)
 
 1. Implement read-only reporting queries and contracts without exposing write-model persistence internals.
 2. Build the intentionally small React/TypeScript client: order form, validation feedback, status view, and lab-override entry point.
@@ -71,7 +71,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** frontend build, lint/format, and tests pass; the client can submit and trace an order against the local API.
 
-## Phase 8 — Compose, scenarios, and acceptance evidence
+## Phase 8 — Compose, scenarios, and acceptance evidence (started 2026-08-28)
 
 1. Add isolated Docker Compose services for API, frontend, PostgreSQL, Redis, Redpanda, Hangfire support, and connector fakes.
 2. Add health/readiness checks and a clean-start smoke test.

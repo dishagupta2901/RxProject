@@ -1,0 +1,86 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: canvas;
+  color: canvastext;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.subtitle {
+  opacity: 0.75;
+  margin-top: -0.5rem;
+}
+
+.token-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 24rem;
+  margin-bottom: 1.5rem;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.panels form,
+.status-view,
+.lab-override-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid color-mix(in srgb, canvastext 20%, transparent);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.order-form label,
+.status-view label,
+.lab-override-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.field-error {
+  color: #d64545;
+  font-size: 0.8rem;
+}
+
+[role='alert'] {
+  color: #d64545;
+}
+
+.hint {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 0.85rem;
+}
+
+.status-rejected {
+  color: #d64545;
+}
+
+.last-result {
+  margin-top: 1.5rem;
+}

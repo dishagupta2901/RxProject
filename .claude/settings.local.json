@@ -5,7 +5,29 @@
       "Bash(npm -v)",
       "Bash(where node *)",
       "Bash(where npm *)",
-      "PowerShell(node -v; npm -v; \\(Get-Command node -ErrorAction SilentlyContinue\\).Source; \\(Get-Command npm -ErrorAction SilentlyContinue\\).Source)"
+      "PowerShell(node -v; npm -v; \\(Get-Command node -ErrorAction SilentlyContinue\\).Source; \\(Get-Command npm -ErrorAction SilentlyContinue\\).Source)",
+      "Bash(mkdir -p \"c:/Users/user/Documents/RxProject/.claude/agents\")",
+      "Bash(rm -rf \"c:/Users/user/Documents/RxProject/.claude/agents\"; find \"c:/Users/user/Documents/RxProject/.claude\" -type f; echo \"---.codex/skills now---\"; find \"c:/Users/user/Documents/RxProject/.codex/skills\" -mindepth 1 -maxdepth 1 -type d | sort)",
+      "Bash(ls -la \"c:/Users/user/Documents/\" 2>/dev/null | grep -i instructor)",
+      "Read(//c/Users/user/Documents/**)",
+      "Bash(npm --version)",
+      "Bash(dotnet --version)",
+      "Bash(docker --version)",
+      "Bash(docker info *)",
+      "Bash(npm config *)",
+      "Bash(timeout 20 npm ping)",
+      "Bash(dotnet build *)",
+      "Bash(dotnet test *)",
+      "Bash(dotnet format *)",
+      "Bash(curl -s -o /tmp/health.json -w \"%{http_code}\\\\n\" http://localhost:5158/health)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /tmp/orders.json -w \"%{http_code}\\\\n\" -X POST http://localhost:5158/orders -H \"Content-Type: application/json\" -d '{\"sphere\":1,\"cylinder\":0,\"axis\":90,\"frameId\":\"F-001\",\"frameA\":50,\"frameB\":40}')",
+      "Bash(npm install *)",
+      "Bash(npm view *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\user\\Documents\\RxProject\\.claude",
+      "c:\\Users\\user\\Documents\\RxProject\\.claude\\agents"
     ]
   }
 }

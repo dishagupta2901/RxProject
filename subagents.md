@@ -1,6 +1,6 @@
 # Planned subagents and collaboration
 
-This is a coordination plan for later implementation. No subagents are required for the documentation-only phase.
+This is a coordination plan for later implementation. Each role below now has a corresponding skill under `.codex/skills/` (added 2026-08-28, moved from a short-lived `.claude/agents/` location the same day so Codex can load them too): `rxflow-domain-modeller`, `rxflow-api-application-engineer`, `rxflow-infrastructure-engineer`, `rxflow-worker-reliability-engineer`, `rxflow-verification-engineer`, `rxflow-instructor-doc-editor`, and `rxflow-frontend-contract-engineer`. Invoking a role does not itself authorize skipping phase gates in `docs/implementation-plan.md`.
 
 ## Roles
 
@@ -26,6 +26,10 @@ This is a coordination plan for later implementation. No subagents are required 
 ## Preparation update (2026-08-28)
 
 Add a **Frontend/API contract engineer** role owning the React client, API-client typing, and end-to-end traceability without duplicating backend rules. Temporary delegated reviews during repository analysis covered requirements, architecture, and project-specific workflow skills.
+
+## Skills update (2026-08-28)
+
+`.codex/skills/` now covers both the workflow gates in `Agents.md` and the per-role playbooks above, all in the one location Codex actually reads: `rxflow-quality-gates` and `rxflow-reproduction-evidence` already existed (restore/build/test/format/analyzer/vulnerability checks and deterministic scenario reproduction); `rxflow-decision-sync` (keep `Requirements.md`/`architecture.md`/`DECISIONS.md` synchronized) and `rxflow-participant-boundary` (screen for real-world identifiers, secrets, and instructor-only content before a change is done) closed the workflow-step gaps; and the seven role skills (`rxflow-domain-modeller` through `rxflow-frontend-contract-engineer`) give Codex the same scope/boundary/escalation guidance a human in that role would follow.
 
 ## Escalation points
 

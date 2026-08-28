@@ -1,10 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <RootNamespace>RxFlow.Infrastructure</RootNamespace>
-    <AssemblyName>RxFlow.Infrastructure</AssemblyName>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\RxFlow.Application\RxFlow.Application.csproj" />
     <ProjectReference Include="..\RxFlow.Domain\RxFlow.Domain.csproj" />
+    <ProjectReference Include="..\RxFlow.Reporting\RxFlow.Reporting.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="StackExchange.Redis" />
+    <PackageReference Include="Confluent.Kafka" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\database\migrations\*.cs" Link="Migrations\%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

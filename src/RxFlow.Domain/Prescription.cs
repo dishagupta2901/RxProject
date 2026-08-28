@@ -2,9 +2,10 @@ namespace RxFlow.Domain;
 
 public sealed record Prescription
 {
-    public decimal Sphere { get; }
-    public decimal Cylinder { get; }
-    public int Axis { get; }
+    private Prescription() { }
+    public decimal Sphere { get; private set; }
+    public decimal Cylinder { get; private set; }
+    public int Axis { get; private set; }
 
     public Prescription(decimal sphere, decimal cylinder, int axis)
     {

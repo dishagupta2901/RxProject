@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RxFlow.Api/RxFlow.Api.csproj" />
+    <Project Path="src/RxFlow.Application/RxFlow.Application.csproj" />
+    <Project Path="src/RxFlow.Domain/RxFlow.Domain.csproj" />
+    <Project Path="src/RxFlow.Infrastructure/RxFlow.Infrastructure.csproj" />
+    <Project Path="src/RxFlow.Reporting/RxFlow.Reporting.csproj" />
+    <Project Path="src/RxFlow.Workers/RxFlow.Workers.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RxFlow.Application.Tests/RxFlow.Application.Tests.csproj" />
+    <Project Path="tests/RxFlow.Domain.Tests/RxFlow.Domain.Tests.csproj" />
+    <Project Path="tests/RxFlow.Infrastructure.Tests/RxFlow.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>

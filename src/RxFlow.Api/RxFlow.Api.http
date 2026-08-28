@@ -1,0 +1,34 @@
+@RxFlow.Api_HostAddress = http://localhost:5080
+@token = replace-with-a-bearer-token
+
+GET {{RxFlow.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+POST {{RxFlow.Api_HostAddress}}/orders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "sphere": 1.0,
+  "cylinder": 0.0,
+  "axis": 90,
+  "frameId": "F-001",
+  "frameA": 50,
+  "frameB": 40
+}
+
+###
+
+GET {{RxFlow.Api_HostAddress}}/reports/orders/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+GET {{RxFlow.Api_HostAddress}}/reports/orders?take=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###

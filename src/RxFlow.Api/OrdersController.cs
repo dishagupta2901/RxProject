@@ -6,11 +6,13 @@ namespace RxFlow.Api;
 
 [ApiController]
 [Route("orders")]
+[Microsoft.AspNetCore.Authorization.Authorize]
 public sealed class OrdersController : ControllerBase
 {
     private readonly SubmitOrderService _service;
+    private readonly IOrderRepository _orders;
 
-    public OrdersController(SubmitOrderService service) => _service = service;
+    public OrdersController(SubmitOrderService service, IOrderRepository orders) { _service = service; _orders = orders; }
 
     [HttpPost]
     public async Task<ActionResult<SubmitOrderResult>> Post(CreateOrderRequest request, CancellationToken cancellationToken)
@@ -28,6 +30,13 @@ public sealed class OrdersController : ControllerBase
         {
             return BadRequest(new { error = exception.Message });
         }
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<object>> Get(Guid id, CancellationToken cancellationToken)
+    {
+        var order = await _orders.GetAsync(id, cancellationToken).ConfigureAwait(false);
+        return order is null ? NotFound() : Ok(new { order.Id, order.Status, FrameId = order.Frame.Id });
     }
 }
 

@@ -4,9 +4,10 @@ public enum OrderStatus { Submitted, Validated, Routed, Scheduled, Shipped, Reje
 
 public sealed record Frame
 {
-    public string Id { get; }
-    public decimal A { get; }
-    public decimal B { get; }
+    private Frame() { }
+    public string Id { get; private set; } = string.Empty;
+    public decimal A { get; private set; }
+    public decimal B { get; private set; }
     public Frame(string id, decimal a, decimal b)
     {
         if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("Frame id is required.", nameof(id));
@@ -17,9 +18,10 @@ public sealed record Frame
 
 public sealed class LensOrder
 {
-    public Guid Id { get; }
-    public Prescription Prescription { get; }
-    public Frame Frame { get; }
+    private LensOrder() { }
+    public Guid Id { get; private set; }
+    public Prescription Prescription { get; private set; } = null!;
+    public Frame Frame { get; private set; } = null!;
     public OrderStatus Status { get; private set; } = OrderStatus.Submitted;
 
     public LensOrder(Guid id, Prescription prescription, Frame frame)
@@ -32,7 +34,7 @@ public sealed class LensOrder
 
     public void ValidateGrindability(decimal maxAbsolutePower)
     {
-        if (maxAbsolutePower <= 0) throw new ArgumentOutOfRangeException(nameof(maxAbsolutePower));
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxAbsolutePower);
         var power = Math.Max(Math.Abs(Prescription.Sphere), Math.Abs(Prescription.Sphere + Prescription.Cylinder));
         Status = power <= maxAbsolutePower ? OrderStatus.Validated : OrderStatus.Rejected;
     }
