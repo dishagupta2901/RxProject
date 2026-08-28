@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>RxFlow.Workers</RootNamespace>
+    <AssemblyName>RxFlow.Workers</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RxFlow.Application\RxFlow.Application.csproj" />
+    <ProjectReference Include="..\RxFlow.Infrastructure\RxFlow.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

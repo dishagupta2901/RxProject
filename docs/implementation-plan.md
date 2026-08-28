@@ -11,7 +11,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** pinned restore succeeds; empty projects compile; format and analyzers pass.
 
-## Phase 1 — Domain kernel
+## Phase 1 — Domain kernel (started 2026-08-28)
 
 1. Implement value objects and entities for prescription, lens/frame selection, order, lab capability/load, production scheduling, and shipment.
 2. Encode physical grindability, lifecycle transitions, pricing inputs, and invariant failures in plain C# with no infrastructure references.
@@ -19,7 +19,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** domain tests and property tests pass; dependency direction is domain-only.
 
-## Phase 2 — Application use cases and ports
+## Phase 2 — Application use cases and ports (started 2026-08-28)
 
 1. Define `SubmitOrder`, validation/pricing, lab-routing, scheduling, shipment, and lab-override use cases.
 2. Define explicit ports for repositories, clock/id generation, connector calls, job dispatch, cache/locks, and event publication.
@@ -28,7 +28,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** use cases run entirely against in-memory fakes; contracts are stable enough for API and infrastructure work.
 
-## Phase 3 — API and authentication slice
+## Phase 3 — API and authentication slice (started 2026-08-28)
 
 1. Implement the chosen controllers/minimal APIs and validation approach.
 2. Add token authentication, authorization policies, and the lab-override workflow using synthetic issuer/audience/role fixtures.
@@ -37,7 +37,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** authenticated `POST /orders` succeeds and invalid requests produce documented responses; API tests pass.
 
-## Phase 4 — Persistence and migrations
+## Phase 4 — Persistence and migrations (started 2026-08-28)
 
 1. Implement EF Core/Npgsql mappings and repositories for authoritative workflow state.
 2. Create four to six purposeful migrations, seed only synthetic data, and document downgrade behavior.
@@ -45,7 +45,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** clean database migration and downgrade both work; repository tests pass without timing sleeps.
 
-## Phase 5 — Infrastructure adapters and local dependencies
+## Phase 5 — Infrastructure adapters and local dependencies (started 2026-08-28)
 
 1. Implement Redis cache and distributed-lock adapters with observable ownership/expiry failures.
 2. Implement typed/named `HttpClient` connectors for pricing, lab capability/load, coating, and shipment fakes.
@@ -54,7 +54,7 @@ This plan starts after the current documentation/preparation phase. Each phase s
 
 **Exit checks:** adapter integration tests pass against ephemeral containers or deterministic local fakes; no production endpoints are configurable by default.
 
-## Phase 6 — Workers and end-to-end order flow
+## Phase 6 — Workers and end-to-end order flow (started 2026-08-28)
 
 1. Implement Hangfire jobs for lab submission, surfacing/coating scheduling, status progression, and shipment updates.
 2. Add Kafka consumers in Workers if required by the accepted design; enforce idempotency and retry limits.

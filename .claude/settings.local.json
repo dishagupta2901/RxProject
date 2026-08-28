@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(npm -v)",
+      "Bash(where node *)",
+      "Bash(where npm *)",
+      "PowerShell(node -v; npm -v; \\(Get-Command node -ErrorAction SilentlyContinue\\).Source; \\(Get-Command npm -ErrorAction SilentlyContinue\\).Source)"
     ]
   }
 }

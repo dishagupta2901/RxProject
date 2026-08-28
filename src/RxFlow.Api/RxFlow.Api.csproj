@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <RootNamespace>RxFlow.Api</RootNamespace>
+    <AssemblyName>RxFlow.Api</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RxFlow.Application\RxFlow.Application.csproj" />
+    <ProjectReference Include="..\RxFlow.Domain\RxFlow.Domain.csproj" />
+  </ItemGroup>
+</Project>
