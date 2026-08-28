@@ -1,0 +1,11 @@
+﻿{
+    "profile":  "rx-security",
+    "testId":  "00-cli-resolution",
+    "command":  "Get-Command codex",
+    "expected":  "codex executable resolvable on PATH",
+    "actual":  "not found",
+    "exitCode":  1,
+    "status":  "BLOCKED",
+    "evidence":  "codex executable not found on PATH. C:\\Users\\user\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin is a junction to $CODEX_HOME\\packages\\standalone\\current\\bin, which does not exist. Reinstall/repair the Codex CLI before re-running this script (see docs/codex-profile-operations.md, \u0027Unblocking the CLI\u0027).",
+    "timestamp":  "2026-08-28T09:35:05.8882584Z"
+}

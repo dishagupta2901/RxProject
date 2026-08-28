@@ -1,0 +1,9 @@
+﻿{
+    "profile":  "rx-ci",
+    "status":  "BLOCKED",
+    "detail":  "codex executable not found on PATH; rx-ci cannot run. This is a genuine, currently-true condition on this machine - see docs/codex-profile-threat-model.md.",
+    "exitCode":  127,
+    "timeoutSec":  300,
+    "transcript":  "C:\\Users\\user\\Documents\\RxProject\\scripts\\codex-profiles\\results\\rx-ci-2026-08-28T09-34-45Z.jsonl",
+    "timestamp":  "2026-08-28T09:34:45.7241890Z"
+}

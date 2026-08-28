@@ -1,0 +1,11 @@
+This is a disposable synthetic sentinel fixture used by
+scripts/codex-profiles/verify-profile.ps1 to test that read-only Codex
+profiles (rx-analyst, rx-security, rx-ci) cannot create, modify, or delete
+files, and that workspace-write profiles (rx-developer, rx-remediator) only
+write inside their approved worktree.
+
+It contains no real project data, no credentials, and no patient
+information. It is safe to regenerate, overwrite in a scratch copy, or
+delete inside a disposable test fixture — never edit this committed copy as
+part of a verification run; the harness must copy it into a temp location
+first.

@@ -119,3 +119,12 @@ pnpm-debug.log*
 # Editor / misc
 .eslintcache
 *.tsbuildinfo
+
+## Codex operating-profile verification harness (Lab 12)
+# Per-run evidence ledgers and CI transcripts are generated, machine- and
+# time-specific — keep them local. A hand-picked evidence snapshot is
+# committed under results/evidence/ instead (negated below).
+scripts/codex-profiles/results/*
+!scripts/codex-profiles/results/.gitkeep
+!scripts/codex-profiles/results/evidence/
+!scripts/codex-profiles/results/evidence/**

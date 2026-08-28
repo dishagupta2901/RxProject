@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedFor": "RxFlow Lab 12 — Codex operating profiles",
+  "lastUpdated": "2026-08-28",
+  "status": "LIVE_CONFIG_CREATED_ENFORCEMENT_UNVERIFIED",
+  "statusNote": "Config/rules/scripts/docs authored, and .codex/config.toml (project-scoped, loads automatically for this trusted project) now contains all five [profiles.<name>] blocks — validated as syntactically correct TOML via Python tomllib on 2026-08-28. Live enforcement is still UNVERIFIED: the Codex CLI is not resolvable on this machine (see docs/codex-profile-threat-model.md, 'Environment blocker'), and the profile-declaration syntax itself ([profiles.<name>] tables vs. standalone $CODEX_HOME/<name>.config.toml files) is unconfirmed against a live install. Every 'expected' value below is design intent backed by official docs read on 2026-08-28, not an executed observation, unless evidenceStatus says otherwise.",
+  "profiles": {
+    "rx-analyst": {
+      "purpose": "Architecture mapping, code reading, incident investigation, evidence-based reporting",
+      "sandboxMode": "read-only",
+      "approvalPolicy": "untrusted",
+      "networkDefault": "disabled",
+      "networkException": "explicit human authorization for a specific allowlisted read, per run",
+      "mcp": "read-only tools only, when configured; none declared by this repo's example profiles",
+      "writableRoots": [],
+      "prohibited": ["file edits", "generated build output", "dependency installation", "database mutation", "ticket updates", "deployment actions"],
+      "evidenceStatus": "BLOCKED — requires working codex CLI"
+    },
+    "rx-developer": {
+      "purpose": "Implement local code changes and run tests",
+      "sandboxMode": "workspace-write",
+      "approvalPolicy": "on-request",
+      "networkDefault": "disabled",
+      "networkException": "approved dependency restore or approved local integration only",
+      "mcp": "inherits user/system MCP config; none added by this repo's example profiles",
+      "writableRoots": ["default cwd-scoped workspace-write root only — no additional roots declared"],
+      "prohibited": ["deployment", "publication", "release", "production database access", "destructive git (reset --hard, clean -f*, checkout -- overwrite, push)"],
+      "evidenceStatus": "BLOCKED — requires working codex CLI"
+    },
+    "rx-security": {
+      "purpose": "Adversarial review of source, configuration, dependencies, threat boundaries",
+      "sandboxMode": "read-only",
+      "approvalPolicy": "untrusted",
+      "networkDefault": "disabled",
+      "networkException": "specific approved advisory lookup only",
+      "mcp": "read-only security/advisory sources only, when configured; none declared by this repo's example profiles",
+      "writableRoots": [],
+      "prohibited": ["exploit execution against non-local targets", "code modification", "secret retrieval", "credential testing", "active scanning outside authorized local fixtures"],
+      "evidenceStatus": "BLOCKED — requires working codex CLI"
+    },
+    "rx-ci": {
+      "purpose": "Unattended, non-interactive PR analysis",
+      "sandboxMode": "read-only",
+      "approvalPolicy": "never",
+      "networkDefault": "disabled",
+      "networkException": "none — a trusted CI architecture would supply capability outside untrusted code execution; not configured in this repo",
+      "mcp": "none permitted (no interactive-auth or write-capable MCP servers)",
+      "writableRoots": [],
+      "prohibited": ["deployment tokens", "merge tokens", "broad repository-write tokens", "any wait-for-input path"],
+      "evidenceStatus": "PARTIAL — fail-closed-when-tool-missing behavior (test #20) has been executed for real; sandbox/network/approval enforcement itself is BLOCKED"
+    },
+    "rx-remediator": {
+      "purpose": "Controlled patch creation after an approved defect/CI failure",
+      "sandboxMode": "workspace-write",
+      "approvalPolicy": "on-request",
+      "networkDefault": "disabled",
+      "networkException": "approved, controlled dependency source only",
+      "mcp": "inherits user/system MCP config; none added by this repo's example profiles",
+      "writableRoots": ["isolated worktree created by create-remediation-worktree.ps1, plus its .rxflow-artifacts subdirectory only"],
+      "prohibited": ["push", "open/approve/merge PRs", "publish", "release", "deploy", "access to primary or sibling worktrees", "access to Docker socket or deployment config outside scope"],
+      "evidenceStatus": "PARTIAL — git-level worktree isolation/cleanup mechanics have been executed for real; Codex-level sandbox enforcement is BLOCKED"
+    }
+  },
+  "configPrecedence": [
+    "CLI flags / --config overrides",
+    "Project config files (.codex/config.toml), root to cwd, closest wins — trusted projects only",
+    "Profile files selected via --profile",
+    "User config (~/.codex/config.toml)",
+    "System config (/etc/codex/config.toml)",
+    "Built-in defaults"
+  ],
+  "stack": {
+    "detected": ["dotnet"],
+    "notDetected": ["java (no pom.xml/build.gradle*/mvnw/gradlew found)"],
+    "sdkPin": "global.json: 10.0.400 (rollForward=latestPatch)"
+  }
+}

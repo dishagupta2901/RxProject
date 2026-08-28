@@ -1,0 +1,74 @@
+# RxFlow Codex operating profiles — VERSIONED REFERENCE / ROLLBACK BASELINE.
+#
+# This file is the frozen copy of what shipped when these profiles were
+# authored. The LIVE, loaded copy is ../.codex/config.toml (same profile
+# content) — this file exists so that copy has a versioned baseline to diff
+# against or restore from, and so its own header can carry the fuller
+# install narrative without cluttering the live file.
+#
+# The exact profile-declaration syntax below ([profiles.<name>] tables) is
+# still UNVERIFIED against this machine's actual installed Codex CLI (the
+# CLI is currently unrunnable here — see docs/codex-profile-threat-model.md).
+# An alternative form exists per some official docs: standalone
+# `$CODEX_HOME/<name>.config.toml` files instead of `[profiles.<name>]`
+# tables. Both forms were described by different official doc pages fetched
+# 2026-08-28 and could not be disambiguated without a working CLI. If your
+# installed Codex expects the standalone-file form, the live config.toml's
+# blocks are silently ignored — confirm with `codex config` and switch forms
+# there if needed. Never let repository-controlled text silently overwrite
+# existing user or managed configuration.
+#
+# Keys used below (sandbox_mode, approval_policy,
+# sandbox_workspace_write.network_access) are the ones consistently confirmed
+# across https://learn.chatgpt.com/docs/config-file/config-reference and
+# https://learn.chatgpt.com/codex/sandboxing as of 2026-08-28. No deprecated
+# flags (e.g. `--full-auto`) are used anywhere in this file or its companion
+# scripts.
+#
+# Command-level reinforcement lives in
+# .codex/rules/rxflow-operating-profiles.rules — rules are defense in depth,
+# not the security boundary. The boundary is sandbox_mode + approval_policy
+# below, backed by Codex's own sandbox implementation.
+
+[profiles.rx-analyst]
+# Architecture mapping, code reading, incident investigation. No writes, no
+# unreviewed network reads.
+sandbox_mode = "read-only"
+approval_policy = "untrusted"
+
+[profiles.rx-developer]
+# Local implementation + tests. Deliberately does NOT set
+# sandbox_workspace_write.writable_roots — adding roots only ever widens
+# access, and Codex's default workspace-write already scopes writes to the
+# launched working directory (this repo checkout) while denying home,
+# workspace-parent, "/", and credential directories by default. Widening that
+# default is exactly what this profile must not do.
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+sandbox_workspace_write.network_access = false
+
+[profiles.rx-security]
+# Adversarial review of source/config/dependencies. Same read-only boundary
+# as rx-analyst; kept as a separate profile because its intended prompt/skill
+# framing (threat-model lens) differs, not its sandbox policy.
+sandbox_mode = "read-only"
+approval_policy = "untrusted"
+
+[profiles.rx-ci]
+# Unattended, non-interactive PR analysis. approval_policy = "never" means an
+# operation that would otherwise ask for approval must fail immediately
+# instead of blocking — there is no human present to answer. Must only ever
+# be invoked through `codex exec` (scripts/codex-profiles/run-ci-analysis.ps1),
+# never the interactive TUI.
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+[profiles.rx-remediator]
+# Controlled patch creation. Must only be launched with the isolated
+# worktree created by scripts/codex-profiles/create-remediation-worktree.ps1
+# as the working directory — isolation from the primary checkout is enforced
+# by that cwd scoping plus this sandbox default, not by a writable_roots
+# entry (see rx-developer's rationale above; it applies identically here).
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+sandbox_workspace_write.network_access = false

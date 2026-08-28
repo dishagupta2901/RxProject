@@ -1,0 +1,45 @@
+# RxFlow Codex operating profiles — ACTIVE project-scoped config.
+#
+# This file loads automatically for this project because it is already
+# marked trusted (see `[projects.'c:\users\user\documents\rxproject']` in
+# this machine's `~/.codex/config.toml`) — project config only loads for
+# trusted projects. It does not touch or override that user-level file;
+# both are loaded and merged per Codex's documented precedence (project
+# config wins over user config for keys it sets).
+#
+# Origin / versioned reference copy: .codex/config.profiles.example.toml —
+# see that file's header and docs/codex-operating-profiles.md for why the
+# exact profile-declaration syntax below (`[profiles.<name>]` tables) is
+# UNVERIFIED: the Codex CLI is not runnable on this machine (see
+# docs/codex-profile-threat-model.md, "Environment blocker"), so it could
+# not be confirmed against `codex --version` / `codex config` before this
+# file was created. If your installed Codex instead expects profiles as
+# standalone `$CODEX_HOME/<name>.config.toml` files, these blocks will be
+# silently ignored rather than applied — verify with `codex config` after
+# installing/repairing the CLI, per docs/codex-profile-operations.md.
+#
+# Command-level reinforcement: .codex/rules/rxflow-operating-profiles.rules
+# (only loads for trusted projects, same as this file). Rules are defense
+# in depth, not the security boundary — see that file and the docs for why.
+
+[profiles.rx-analyst]
+sandbox_mode = "read-only"
+approval_policy = "untrusted"
+
+[profiles.rx-developer]
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+sandbox_workspace_write.network_access = false
+
+[profiles.rx-security]
+sandbox_mode = "read-only"
+approval_policy = "untrusted"
+
+[profiles.rx-ci]
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+[profiles.rx-remediator]
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+sandbox_workspace_write.network_access = false
